@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  n8n:
+    image: n8nio/n8n
+    container_name: n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=supersecreto123
+      - TZ=America/Argentina/Buenos_Aires
+    volumes:
+      - ./n8n_data:/home/node/.n8n
+
+  django:
+    build: ../django_api
+    container_name: simple_django_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../django_api:/app
+    working_dir: /app
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  ngrok_django:
+    image: ngrok/ngrok:latest
+    container_name: ngrok_django
+    restart: unless-stopped
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    command: http django:8000
+
+  ngrok_n8n:
+    image: ngrok/ngrok:latest
+    container_name: ngrok_n8n
+    restart: unless-stopped
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    command: http n8n:5678
