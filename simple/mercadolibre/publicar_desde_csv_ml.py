@@ -1,12 +1,23 @@
-
 import requests
 import csv
+import json
 
-# 🔐 Access Token generado previamente
-ACCESS_TOKEN = 'TU_ACCESS_TOKEN'  # ⬅️ Reemplazar con el token válido
-
-# 📂 Archivo CSV con los productos (en la misma carpeta del script)
+# 📂 Archivos
 CSV_FILE = 'plantilla_publicacion_mercadolibre.csv'
+TOKEN_FILE = 'token_data.json'
+
+# 📥 Función para cargar el access_token del token guardado
+def load_access_token():
+    try:
+        with open(TOKEN_FILE, 'r') as f:
+            tokens = json.load(f)
+            return tokens.get('access_token')
+    except FileNotFoundError:
+        print("❌ No se encontró el archivo de tokens. Ejecutá primero el login.")
+        exit()
+
+# 🔐 Access Token leído automáticamente
+ACCESS_TOKEN = load_access_token()
 
 # 📌 URL de la API de MercadoLibre
 url = "https://api.mercadolibre.com/items"
@@ -58,3 +69,4 @@ with open(CSV_FILE, newline='', encoding='utf-8') as csvfile:
         else:
             print("❌ Error al publicar:", row["title"])
             print(response.status_code, response.text)
+
