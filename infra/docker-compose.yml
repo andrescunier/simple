@@ -24,19 +24,42 @@ services:
     working_dir: /app
     environment:
       - PYTHONUNBUFFERED=1
+      - DB_HOST=postgres_simple
+      - DB_PORT=5432
+      - DB_NAME=simple_db
+      - DB_USER=simple_user
+      - DB_PASSWORD=simple_pass
 
   ngrok_django:
     image: ngrok/ngrok:latest
     container_name: ngrok_django
     restart: unless-stopped
     environment:
-      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
-    command: http django:8000
+      - NGROK_AUTHTOKEN=TU_AUTHTOKEN_AQUI
+      - NGROK_REGION=us
+      - NGROK_TUNNELS=django
+      - NGROK_TUNNELS_DJANGO_ADDR=simple_django_api:8000
+      - NGROK_TUNNELS_DJANGO_PROTO=http
 
-  ngrok_n8n:
-    image: ngrok/ngrok:latest
-    container_name: ngrok_n8n
-    restart: unless-stopped
+  php_server:
+    image: php:8.2-apache
+    container_name: php_server
+    ports:
+      - "8080:80"
+    volumes:
+      - ./php_server:/var/www/html
+
+  postgres_simple:
+    image: postgres:15
+    container_name: postgres_simple
+    ports:
+      - "5432:5432"
     environment:
-      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
-    command: http n8n:5678
+      POSTGRES_DB: simple_db
+      POSTGRES_USER: simple_user
+      POSTGRES_PASSWORD: simple_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

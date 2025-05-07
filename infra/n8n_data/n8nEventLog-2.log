@@ -1,0 +1,2 @@
+{"__type":"$$EventMessageAudit","id":"8e731115-d3c3-4a5f-a879-1b4d2f8f9a96","ts":"2025-05-05T10:04:44.155-03:00","eventName":"n8n.audit.user.login.success","message":"n8n.audit.user.login.success","payload":{"userId":"8f3d9630-51e2-482a-a362-54b81238a999","_email":"latammerchant@gmail.com","_firstName":"Latam","_lastName":"Merchant","globalRole":"global:owner","authenticationMethod":"email"}}
+{"__type":"$$EventMessageConfirm","confirm":"8e731115-d3c3-4a5f-a879-1b4d2f8f9a96","ts":"2025-05-05T10:04:44.156-03:00","source":{"id":"0","name":"eventBus"}}
