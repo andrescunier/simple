@@ -8,4 +8,6 @@ router.register(r'clientes', ClienteViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('api/', include('app.urls')),
+    
 ]
